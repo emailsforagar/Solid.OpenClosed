@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Solid.OpenClosed
 {
@@ -7,11 +8,12 @@ namespace Solid.OpenClosed
         static void Main(string[] args)
         {
             Console.WriteLine("*****Start*****");
-            var watch = System.Diagnostics.Stopwatch.StartNew();
+            var watch = Stopwatch.StartNew();
             Employee E1 = new PermanantEmployee(1, "Sagar");
-            Employee E2 = new PermanantEmployee(2, "John");
+            Employee E2 = new ContractEmployee(2, "John");
             Console.WriteLine($"Employee : {E1.ToString()} Bonus ={E1.CalculateBonus(10000)}");
             Console.WriteLine($"Employee : {E2.ToString()} Bonus ={E2.CalculateBonus(10000)}");
+            Console.WriteLine($"{E1.EmpName} has benifit : {new PermanantEmployee(E1.EmpId, E1.EmpName).Healthbenifit()}");
             watch.Stop();
             Console.WriteLine($"Execution time in Milliseconds: {watch.ElapsedMilliseconds}");
             Console.WriteLine("*****End*****");
@@ -24,7 +26,7 @@ namespace Solid.OpenClosed
         public int EmpId { get; set; }
         public string EmpName { get; set; }
 
-        public string EmplSalary { get; set; }
+        public string EmpSalary { get; set; }
 
         public Employee(int empId,string empName)
         {
@@ -40,7 +42,7 @@ namespace Solid.OpenClosed
         }
     }
 
-    public class PermanantEmployee : Employee
+    public class PermanantEmployee : Employee, IBenifit
     {
         public PermanantEmployee(int empId, string empName) : base (empId,empName)
         {
@@ -49,6 +51,11 @@ namespace Solid.OpenClosed
         public override decimal CalculateBonus(decimal EmplSalary)
         {
             return EmplSalary * .1M;
+        }
+
+        public string Healthbenifit()
+        {
+            return "Health Insurance";
         }
     }
     public class ContractEmployee : Employee
@@ -61,5 +68,10 @@ namespace Solid.OpenClosed
         {
             return EmplSalary * .05M;
         }
+    }
+
+    public interface IBenifit
+    {
+        string Healthbenifit();
     }
 }
